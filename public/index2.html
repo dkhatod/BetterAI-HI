@@ -1,0 +1,52 @@
+
+<head>
+    <title>HIbot</title>
+</head>
+<body>
+    <div id ="chat">
+        <div id="messages">
+            <input type="text" id="messageInput"> <!--placeholder-->
+            <button id="sendButton">Send</button>
+        </div>
+    </div>
+</body>
+<style>
+    #chat {
+        max-width: 600px;
+        margin: auto;
+        padding: 20px;
+        align-content: center;
+    }
+    #messages {
+        height: 300px;
+        overflow-y: scroll;
+        margin-bottom: 10px;
+        align-content: center;
+    }
+</style>
+
+<script>
+    const ws = new WebSocket('ws://localhost:3000')
+    const messagesDiv = document.getElementById('messages')
+    const messageInput = document.getElementById('messageInput')
+    const sendButton = document.getElementById('sendButton')
+
+    ws.onmessage = (event) => {
+        const message = document.createElement('div')
+        message.textContent = event.data;
+        messagesDiv.appendChild(message);
+    }
+
+    sendButton.addEventListener('click', () => {
+        const message = messageInput.value;
+        ws.send(message);
+        messageInput.value = '';
+    });
+
+    messageInput.addEventListener("keydown", event => {
+        event.key == "Enter" && sendButton.click()
+    });
+
+
+</script>
+</body>
